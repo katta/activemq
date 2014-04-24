@@ -32,7 +32,7 @@
     <!--
         The <broker> element is used to configure the ActiveMQ broker.
     -->
-    <broker xmlns="http://activemq.apache.org/schema/core" brokerName="localhost" dataDirectory="${activemq.base}/data" destroyApplicationContextOnStop="true">
+    <broker xmlns="http://activemq.apache.org/schema/core" brokerName="<%= Chef::ActiveMQ.broker_name(node) %>" dataDirectory="${activemq.base}/data" destroyApplicationContextOnStop="true">
 
         <!--
 			      For better performances use VM cursor and small memory limit.
@@ -96,7 +96,18 @@
             http://activemq.apache.org/persistence.html
         -->
         <persistenceAdapter>
+          <% if node['activemq']['persistence']['type'] == 'kahaDB' -%>
             <kahaDB directory="${activemq.data}/kahadb"/>
+          <% elsif node['activemq']['persistence']['type'] === 'replicatedLevelDB' -%> 
+            <replicatedLevelDB
+               directory="${activemq.data}"
+               replicas="<%= node['activemq']['persistence']['replicas']%>"
+               bind="tcp://<%= node['activemq']['persistence']['bind_host']%>:<%= node['activemq']['bind_port']%>"
+               zkAddress="<%= node['activemq']['persistence']['zookeeper']['servers'].join(',')%>"
+               zkPath="<%= node['activemq']['persistence']['zookeeper']['path']%>"
+               hostname="<%= node['activemq']['persistence']['hostname']%>"
+            />
+          <% end -%>
         </persistenceAdapter>
 
 

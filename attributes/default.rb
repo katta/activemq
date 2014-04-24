@@ -25,3 +25,18 @@ default['activemq']['wrapper']['useDedicatedTaskRunner'] = 'true'
 
 default['activemq']['enable_stomp'] = true
 default['activemq']['use_default_config'] = false
+
+# Settings related to PersistenceAdapter and Cluster
+default['activemq']['brokername'] = "localhost"
+default['activemq']['cluster'] = false
+
+default['activemq']['persistence']['type'] = 'kahaDB' # [kahaDB|replicatedLevelDB]
+
+default['activemq']['persistence']['replicas'] = '3'
+default['activemq']['persistence']['bind_host'] = '0.0.0.0'
+default['activemq']['persistence']['bind_port'] = '0'
+default['activemq']['persistence']['hostname'] = node['hostname']
+
+default['activemq']['persistence']['zookeeper']['path'] = '/activemq/leveldb-stores'
+default['activemq']['persistence']['zookeeper']['servers'] = []
+
