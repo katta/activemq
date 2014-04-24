@@ -39,14 +39,5 @@ class Chef
         'run.jar'
       end
     end
-
-    def self.broker_name(node)
-      broker_name = node['activemq']['brokername']
-      cluster_enabled = node['activemq']['cluster']
-      if cluster_enabled
-        broker_name = (node['chef_environment'] || 'activemq') + '-cluster'
-      end
-      broker_name
-    end
-  end
+ end
 end

@@ -27,8 +27,8 @@ default['activemq']['enable_stomp'] = true
 default['activemq']['use_default_config'] = false
 
 # Settings related to PersistenceAdapter and Cluster
-default['activemq']['brokername'] = "localhost"
 default['activemq']['cluster'] = false
+default['activemq']['cluster_name'] = "localhost"
 
 default['activemq']['persistence']['type'] = 'kahaDB' # [kahaDB|replicatedLevelDB]
 
