@@ -55,10 +55,8 @@ unless File.exists?("#{node['activemq']['home']}/bin/activemq")
     cwd node['activemq']['install_dir']
   end
 
-  directory "#{node['activemq']['install_dir']}/apache-activemq-#{version}" do
-    owner 'activemq'
-    group 'activemq'
-    recursive true
+  execute "chown -R activemq:activemq #{node['activemq']['install_dir']}/apache-activemq-#{version}" do
+    cwd node['activemq']['install_dir']
   end
 
   link activemq_home do
@@ -66,33 +64,6 @@ unless File.exists?("#{node['activemq']['home']}/bin/activemq")
     owner 'activemq'
     group 'activemq'
   end
-end
-
-file "#{activemq_home}/bin/activemq" do
-  owner 'activemq'
-  group 'activemq'
-  mode  '0755'
-end
-
-template "#{activemq_home}/bin/activemq_start.sh" do
-  source   'activemq_start.sh.erb'
-  mode     '0755'
-  owner    'activemq'
-  group    'activemq'
-end
-
-template "#{activemq_home}/bin/activemq_stop.sh" do
-  source   'activemq_stop.sh.erb'
-  mode     '0755'
-  owner    'activemq'
-  group    'activemq'
-end
-
-template "#{activemq_home}/bin/activemq_status.sh" do
-  source   'activemq_status.sh.erb'
-  mode     '0755'
-  owner    'activemq'
-  group    'activemq'
 end
 
 template "/etc/init.d/activemq" do
