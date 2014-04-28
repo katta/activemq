@@ -22,63 +22,117 @@ include_recipe 'java::default'
 tmp = Chef::Config[:file_cache_path]
 version = node['activemq']['version']
 mirror = node['activemq']['mirror']
-activemq_home = "#{node['activemq']['home']}/apache-activemq-#{version}"
+activemq_home = "#{node['activemq']['home']}"
 
-directory node['activemq']['home'] do
-  recursive true
+group "activemq" do
+  gid node[:activemq][:gid]
+  action :create
 end
 
-unless File.exists?("#{activemq_home}/bin/activemq")
+user "activemq" do
+  uid node['activemq']['uid']
+  gid node['activemq']['gid']
+end
+
+[node['activemq']['data_dir'], node['activemq']['log_dir'], node['activemq']['pid_dir']].each do |dir|
+  directory dir do
+    owner "activemq"
+    group "activemq"
+    recursive true
+    mode 0755
+  end
+end
+
+unless File.exists?("#{node['activemq']['home']}/bin/activemq")
   remote_file "#{tmp}/apache-activemq-#{version}-bin.tar.gz" do
     source "#{mirror}/activemq/apache-activemq/#{version}/apache-activemq-#{version}-bin.tar.gz"
     mode   '0644'
+    owner   'activemq'
+    group   'activemq'
   end
 
   execute "tar zxf #{tmp}/apache-activemq-#{version}-bin.tar.gz" do
-    cwd node['activemq']['home']
+    cwd node['activemq']['install_dir']
+  end
+
+  directory "#{node['activemq']['install_dir']}/apache-activemq-#{version}" do
+    owner 'activemq'
+    group 'activemq'
+    recursive true
+  end
+
+  link activemq_home do
+    to "#{node['activemq']['install_dir']}/apache-activemq-#{version}"
+    owner 'activemq'
+    group 'activemq'
   end
 end
 
 file "#{activemq_home}/bin/activemq" do
-  owner 'root'
-  group 'root'
+  owner 'activemq'
+  group 'activemq'
   mode  '0755'
 end
 
-# TODO: make this more robust
-arch = node['kernel']['machine'] == 'x86_64' ? 'x86-64' : 'x86-32'
+template "#{activemq_home}/bin/activemq_start.sh" do
+  source   'activemq_start.sh.erb'
+  mode     '0755'
+  owner    'activemq'
+  group    'activemq'
+end
 
-link '/etc/init.d/activemq' do
-  to "#{activemq_home}/bin/linux-#{arch}/activemq"
+template "#{activemq_home}/bin/activemq_stop.sh" do
+  source   'activemq_stop.sh.erb'
+  mode     '0755'
+  owner    'activemq'
+  group    'activemq'
+end
+
+template "#{activemq_home}/bin/activemq_status.sh" do
+  source   'activemq_status.sh.erb'
+  mode     '0755'
+  owner    'activemq'
+  group    'activemq'
+end
+
+template "/etc/init.d/activemq" do
+  source   'activemq_initd.erb'
+  mode     '0755'
+  owner    'root'
+  group    'root'
+end
+
+template "/etc/default/activemq" do
+  source   'activemq_config.erb'
+  mode     '0644'
+  owner    'activemq'
+  group    'activemq'
+  notifies :restart, 'service[activemq]'
+  variables({
+    :activemq_home => activemq_home
+  })
+  only_if  { node['activemq']['use_default_config'] }
 end
 
 template "#{activemq_home}/conf/activemq.xml" do
   source   'activemq.xml.erb'
   mode     '0755'
-  owner    'root'
-  group    'root'
+  owner    'activemq'
+  group    'activemq'
+  notifies :restart, 'service[activemq]'
+  only_if  { node['activemq']['use_default_config'] }
+end
+
+template "#{activemq_home}/conf/log4j.properties" do
+  source   'log4j.properties.erb'
+  mode     '0644'
+  owner    'activemq'
+  group    'activemq'
   notifies :restart, 'service[activemq]'
   only_if  { node['activemq']['use_default_config'] }
 end
 
 service 'activemq' do
-  supports :restart => true, :status => true
+  supports :restart => true, :status => true, :reload => true
   action   [:enable, :start]
-end
-
-# symlink so the default wrapper.conf can find the native wrapper library
-link "#{activemq_home}/bin/linux" do
-  to "#{activemq_home}/bin/linux-#{arch}"
-end
-
-# symlink the wrapper's pidfile location into /var/run
-link '/var/run/activemq.pid' do
-  to "#{activemq_home}/bin/linux/ActiveMQ.pid"
-  not_if 'test -f /var/run/activemq.pid'
-end
-
-template "#{activemq_home}/bin/linux/wrapper.conf" do
-  source   'wrapper.conf.erb'
-  mode     '0644'
-  notifies :restart, 'service[activemq]'
 end

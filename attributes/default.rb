@@ -19,16 +19,23 @@
 
 default['activemq']['mirror']  = 'http://apache.mirrors.tds.net'
 default['activemq']['version'] = '5.8.0'
-default['activemq']['home']  = '/opt'
 default['activemq']['wrapper']['max_memory'] = '1024'
 default['activemq']['wrapper']['useDedicatedTaskRunner'] = 'true'
 
 default['activemq']['enable_stomp'] = true
 default['activemq']['use_default_config'] = false
 
+default['activemq']['uid']  = 61010
+default['activemq']['gid']  = 62010
+default['activemq']['install_dir']  = '/opt'
+default['activemq']['home']  = node['activemq']['install_dir'] + "/activemq"
+default['activemq']['data_dir'] = '/var/lib/activemq/data'
+default['activemq']['log_dir'] = '/var/log/activemq'
+default['activemq']['pid_dir'] = '/var/run/activemq'
+
 # Settings related to PersistenceAdapter and Cluster
 default['activemq']['cluster'] = false
-default['activemq']['cluster_name'] = "localhost"
+default['activemq']['cluster_name'] = 'localhost'
 
 default['activemq']['persistence']['type'] = 'kahaDB' # [kahaDB|replicatedLevelDB]
 
@@ -39,4 +46,3 @@ default['activemq']['persistence']['hostname'] = node['hostname']
 
 default['activemq']['persistence']['zookeeper']['path'] = '/activemq/leveldb-stores'
 default['activemq']['persistence']['zookeeper']['servers'] = []
-

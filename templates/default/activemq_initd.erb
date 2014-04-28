@@ -1,0 +1,57 @@
+#!/bin/env bash
+
+### BEGIN INIT INFO
+# Provides:       activemq
+# Required-Start:
+# Required-Stop:
+# Default-Start:  2 3 4 5
+# Default-Stop:   0 1 6
+# Short-Description: ActiveMQ is a JMS Messaging Queue Server.
+### END INIT INFO
+ 
+RETVAL=0 
+ACTIVEMQ_HOME=<%=node['activemq']['home']%>
+
+start() {
+       echo -n $"Starting ActiveMQ: "
+       su -c "$ACTIVEMQ_HOME/bin/activemq start" activemq
+       RETVAL=$?
+       echo
+       return $RETVAL
+}
+stop() {
+       echo -n $"Shutting down ActiveMQ: "
+       su -c "$ACTIVEMQ_HOME/bin/activemq-admin stop" activemq
+       RETVAL=$?
+       echo
+       return $RETVAL
+}
+status() {
+       su -c "$ACTIVEMQ_HOME/bin/activemq status" activemq
+       RETVAL=$?
+       echo
+       return $RETVAL
+}
+restart() {
+       stop
+       start
+}
+case "$1" in
+start)
+       start
+       ;;
+stop)
+       stop
+       ;;
+status)
+       status
+       ;;
+restart|reload)
+       restart
+       ;;
+*)
+       echo $"Usage: $0 {start|stop|restart|status}"
+       exit 1
+esac
+ 
+exit $?
