@@ -40,7 +40,7 @@ default['activemq']['cluster_name'] = 'localhost'
 default['activemq']['persistence']['type'] = 'kahaDB' # [kahaDB|replicatedLevelDB]
 
 default['activemq']['persistence']['replicas'] = '3'
-default['activemq']['persistence']['bind_host'] = Chef::Config[:node_name]
+default['activemq']['persistence']['bind_host'] = '0.0.0.0'
 default['activemq']['persistence']['bind_port'] = '0'
 default['activemq']['persistence']['hostname'] = Chef::Config[:node_name]
 
