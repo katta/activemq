@@ -32,6 +32,7 @@ default['activemq']['home']  = node['activemq']['install_dir'] + "/activemq"
 default['activemq']['data_dir'] = '/var/lib/activemq/data'
 default['activemq']['log_dir'] = '/var/log/activemq'
 default['activemq']['pid_dir'] = '/var/run/activemq'
+default['activemq']['conf_dir'] = '/etc/activemq'
 
 # Settings related to PersistenceAdapter and Cluster
 default['activemq']['cluster'] = false

@@ -1,7 +1,6 @@
 export ACTIVEMQ_HOME="<%=@activemq_home%>"
 export ACTIVEMQ_BASE="$ACTIVEMQ_HOME"
-export ACTIVEMQ_CONF="$ACTIVEMQ_BASE/conf"
+export ACTIVEMQ_CONF="<%=node['activemq']['conf_dir']%>"
 export ACTIVEMQ_DATA="<%=node['activemq']['data_dir']%>"
-export ACTIVEMQ_TMP="$ACTIVEMQ_BASE/tmp"
 export ACTIVEMQ_TMP="$ACTIVEMQ_BASE/tmp"
 export ACTIVEMQ_PIDFILE="<%=node['activemq']['pid_dir']%>/activemq.pid"

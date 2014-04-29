@@ -34,7 +34,7 @@ user "activemq" do
   gid node['activemq']['gid']
 end
 
-[node['activemq']['data_dir'], node['activemq']['log_dir'], node['activemq']['pid_dir']].each do |dir|
+[node['activemq']['data_dir'], node['activemq']['log_dir'], node['activemq']['pid_dir'], node['activemq']['conf_dir']].each do |dir|
   directory dir do
     owner "activemq"
     group "activemq"
