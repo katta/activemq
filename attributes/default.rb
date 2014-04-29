@@ -25,8 +25,8 @@ default['activemq']['wrapper']['useDedicatedTaskRunner'] = 'true'
 default['activemq']['enable_stomp'] = true
 default['activemq']['use_default_config'] = false
 
-default['activemq']['uid']  = 61010
-default['activemq']['gid']  = 62010
+default['activemq']['uid']  = 61003
+default['activemq']['gid']  = 61003
 default['activemq']['install_dir']  = '/opt'
 default['activemq']['home']  = node['activemq']['install_dir'] + "/activemq"
 default['activemq']['data_dir'] = '/var/lib/activemq/data'
