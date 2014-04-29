@@ -34,7 +34,7 @@ user "activemq" do
   gid node['activemq']['gid']
 end
 
-[node['activemq']['data_dir'], node['activemq']['log_dir'], node['activemq']['pid_dir'], node['activemq']['conf_dir']].each do |dir|
+[node['activemq']['data_dir'], node['activemq']['log_dir'], node['activemq']['pid_dir']].each do |dir|
   directory dir do
     owner "activemq"
     group "activemq"
@@ -61,6 +61,12 @@ unless File.exists?("#{node['activemq']['home']}/bin/activemq")
 
   link activemq_home do
     to "#{node['activemq']['install_dir']}/apache-activemq-#{version}"
+    owner 'activemq'
+    group 'activemq'
+  end
+
+  link node['activemq']['conf_dir'] do
+    to "#{activemq_home}/conf"
     owner 'activemq'
     group 'activemq'
   end
