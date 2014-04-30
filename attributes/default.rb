@@ -29,6 +29,7 @@ default['activemq']['uid']  = 61003
 default['activemq']['gid']  = 61003
 default['activemq']['install_dir']  = '/opt'
 default['activemq']['home']  = node['activemq']['install_dir'] + "/activemq"
+default['activemq']['data_base_dir'] = '/var/lib/activemq'
 default['activemq']['data_dir'] = '/var/lib/activemq/data'
 default['activemq']['log_dir'] = '/var/log/activemq'
 default['activemq']['pid_dir'] = '/var/run/activemq'
