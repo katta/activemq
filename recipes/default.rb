@@ -43,12 +43,13 @@ end
   end
 end
 
-unless File.exists?("#{node['activemq']['home']}/bin/activemq")
+unless File.exists?("#{node['activemq']['home']}/bin/activemq") and File.readlink(node['activemq']['home']).include?(version)
   remote_file "#{tmp}/apache-activemq-#{version}-bin.tar.gz" do
     source "#{mirror}/activemq/#{version}/apache-activemq-#{version}-bin.tar.gz"
     mode   '0644'
     owner   'activemq'
     group   'activemq'
+    notifies :restart, 'service[activemq]'
   end
 
   execute "tar zxf #{tmp}/apache-activemq-#{version}-bin.tar.gz" do
