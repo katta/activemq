@@ -48,3 +48,9 @@ default['activemq']['persistence']['hostname'] = Chef::Config[:node_name]
 
 default['activemq']['persistence']['zookeeper']['path'] = '/activemq/leveldb-stores'
 default['activemq']['persistence']['zookeeper']['servers'] = []
+
+# Settings related to Broker Memory Configurations
+default['activemq']['broker']['memoryUsage'] = '256' # Memory in MB
+default['activemq']['broker']['storeUsage'] = '64'  # Memory in GB
+default['activemq']['broker']['tempUsage'] = '16'  # Memory in GB
+default['activemq']['memory']['flowControl'] = '1'  # Memory in MB
