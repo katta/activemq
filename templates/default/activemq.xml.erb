@@ -61,7 +61,7 @@
                       <constantPendingMessageLimitStrategy limit="1000"/>
                     </pendingMessageLimitStrategy>
                   </policyEntry>
-                  <policyEntry queue=">" producerFlowControl="false" optimizedDispatch="true" memoryLimit="<%= node['activemq']['memory']['flowControl']%>mb">
+                  <policyEntry queue=">" producerFlowControl="<%= node['activemq']['queue']['producerFlowControl']%>" optimizedDispatch="<%= node['activemq']['queue']['optimizedDispatch']%>" memoryLimit="<%= node['activemq']['memory']['flowControl']%>mb">
                     <!-- Use VM cursor for better latency
                          For more information, see:
 

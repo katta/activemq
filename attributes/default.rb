@@ -37,6 +37,10 @@ default['activemq']['log_dir'] = '/var/log/activemq'
 default['activemq']['pid_dir'] = '/var/run/activemq'
 default['activemq']['conf_dir'] = '/etc/activemq'
 
+# Settings related to the queue properties
+default['activemq']['queue']['optimizedDispatch'] = false
+default['activemq']['queue']['producerFlowControl'] = true
+
 # Settings related to PersistenceAdapter and Cluster
 default['activemq']['cluster'] = false
 default['activemq']['cluster_name'] = 'localhost'
