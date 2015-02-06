@@ -61,7 +61,7 @@
                       <constantPendingMessageLimitStrategy limit="1000"/>
                     </pendingMessageLimitStrategy>
                   </policyEntry>
-                  <policyEntry queue=">" producerFlowControl="true" memoryLimit="<%= node['activemq']['memory']['flowControl']%>mb">
+                  <policyEntry queue=">" producerFlowControl="false" optimizedDispatch="true" memoryLimit="<%= node['activemq']['memory']['flowControl']%>mb">
                     <!-- Use VM cursor for better latency
                          For more information, see:
 
@@ -120,7 +120,7 @@
         <systemUsage>
           <systemUsage>
               <memoryUsage>
-                  <memoryUsage limit="<%= node['activemq']['broker']['memoryUsage']%> mb"/>
+                  <memoryUsage percentOfJvmHeap="<%= node['activemq']['broker']['memoryUsage']%>"/>
               </memoryUsage>
               <storeUsage>
                   <storeUsage limit="<%= node['activemq']['broker']['storeUsage']%> gb"/>
@@ -139,8 +139,10 @@
         -->
         <transportConnectors>
             <!-- DOS protection, limit concurrent connections to 1000 and frame size to 100MB -->
-            <transportConnector name="openwire" uri="tcp://0.0.0.0:61616?maximumConnections=1000&amp;wireformat.maxFrameSize=104857600"/>
+            <transportConnector name="openwire" uri="nio://0.0.0.0:61616?maximumConnections=1000&amp;wireformat.maxFrameSize=104857600&amp;wireFormat.tightEncodingEnabled=false"/>
+            <% if node['activemq']['enable_amqp'] -%>
             <transportConnector name="amqp" uri="amqp://0.0.0.0:5672?maximumConnections=1000&amp;wireformat.maxFrameSize=104857600"/>
+            <% end -%>
             <% if node['activemq']['enable_stomp'] -%>
             <transportConnector name="stomp" uri="stomp://0.0.0.0:61613?maximumConnections=1000&amp;wireformat.maxFrameSize=104857600"/>
             <% end -%>

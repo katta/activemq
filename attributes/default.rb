@@ -20,9 +20,10 @@
 default['activemq']['mirror']  = 'http://apache.mirrors.tds.net'
 default['activemq']['version'] = '5.8.0'
 default['activemq']['wrapper']['max_memory'] = '1024'
-default['activemq']['wrapper']['useDedicatedTaskRunner'] = 'true'
+default['activemq']['wrapper']['useDedicatedTaskRunner'] = false
 
-default['activemq']['enable_stomp'] = true
+default['activemq']['enable_stomp'] = false
+default['activemq']['enable_amqp'] = false
 default['activemq']['use_default_config'] = false
 
 default['activemq']['uid']  = 61003
@@ -50,7 +51,7 @@ default['activemq']['persistence']['zookeeper']['path'] = '/activemq/leveldb-sto
 default['activemq']['persistence']['zookeeper']['servers'] = []
 
 # Settings related to Broker Memory Configurations
-default['activemq']['broker']['memoryUsage'] = '256' # Memory in MB
+default['activemq']['broker']['memoryUsage'] = '70' # % of memory to use from JVM heap
 default['activemq']['broker']['storeUsage'] = '64'  # Memory in GB
 default['activemq']['broker']['tempUsage'] = '16'  # Memory in GB
 default['activemq']['memory']['flowControl'] = '1'  # Memory in MB
